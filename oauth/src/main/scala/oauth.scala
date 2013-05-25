@@ -23,7 +23,7 @@ object OAuth {
 
   /** Authorization: OAuth header extractor */
   object Header {
-    val KeyVal = """\s*(\w+)="([\w|:|\/|.|%|-]+)" """.trim.r
+    val KeyVal = """\s?(\w+)="([\w|:|\/|.|%|-]+)" """.trim.r
     val keys = Set.empty + "realm" + ConsumerKey + TokenKey + SignatureMethod +
       Sig + Timestamp + Nonce + Callback + Verifier + Version
 
