@@ -39,7 +39,8 @@ object Unfiltered extends Build {
     crossScalaVersions := Seq("2.8.0", "2.8.1", "2.8.2",
                               "2.9.0", "2.9.0-1", "2.9.1"),
     scalaVersion := "2.9.1",
-    publishTo := Some("Scala Tools Nexus" at "http://nexus.scala-tools.org/content/repositories/releases/"),
+    publishMavenStyle := true,
+    publishTo := Some("General Sentiment S3 repo" at "s3://s3-us-east-1.amazonaws.com/generalsentiment/release"),
     credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
     scalacOptions ++= Seq("-Xcheckinit", "-encoding", "utf8"),
     parallelExecution in Test := false // :( test servers collide on same port
@@ -92,7 +93,7 @@ object Unfiltered extends Build {
     module("filter")(
       settings = Seq(
         unmanagedClasspath in (local("filter"), Test) <++=
-          (fullClasspath in (local("spec"), Compile)).identity,
+          (fullClasspath in (local("spec"), Compile)),
         libraryDependencies <++= scalaVersion(v => Seq(servletApiDep) ++
           integrationTestDeps(v))
       )) dependsOn(library)
@@ -101,7 +102,7 @@ object Unfiltered extends Build {
     module("filter-async")(
       settings = Seq(
         unmanagedClasspath in (local("filter-async"), Test) <++=
-          (fullClasspath in (local("spec"), Compile)).identity,
+          (fullClasspath in (local("spec"), Compile)),
         libraryDependencies <++= scalaVersion {
           v => Seq(servletApiDep,continuation) ++ integrationTestDeps(v)
         }
@@ -125,7 +126,7 @@ object Unfiltered extends Build {
       srcPath = "unfiltered/request",
       settings = Seq(
         unmanagedClasspath in (local("uploads"), Test) <++=
-          (fullClasspath in (local("spec"), Compile)).identity,
+          (fullClasspath in (local("spec"), Compile)),
         libraryDependencies <++= scalaVersion(v => Seq(
           servletApiDep,
           "commons-io" % "commons-io" % "1.4",
@@ -160,7 +161,7 @@ object Unfiltered extends Build {
       srcPath = "unfiltered/netty",
       settings = Seq(
         unmanagedClasspath in (local("netty-server"), Test) <++=
-            (fullClasspath in (local("spec"), Compile)).identity,
+            (fullClasspath in (local("spec"), Compile)),
         libraryDependencies <<= scalaVersion(integrationTestDeps _)
        )) dependsOn(netty, util)
 
@@ -168,7 +169,7 @@ object Unfiltered extends Build {
     module("netty")(
       settings = Seq(
         unmanagedClasspath in (local("netty"), Test) <++=
-          (fullClasspath in (local("spec"), Compile)).identity,
+          (fullClasspath in (local("spec"), Compile)),
         libraryDependencies <++= scalaVersion(v =>
           ("org.jboss.netty" % "netty" % "3.2.5.Final" withSources()) +:
           integrationTestDeps(v)
@@ -229,7 +230,7 @@ object Unfiltered extends Build {
     module("netty-websockets")(
       settings = Seq(
         unmanagedClasspath in (local("netty-websockets"), Test) <++=
-          (fullClasspath in (local("spec"), Compile)).identity,
+          (fullClasspath in (local("spec"), Compile)),
         libraryDependencies <++= scalaVersion(integrationTestDeps _)
       )) dependsOn(nettyServer)
 
@@ -237,7 +238,7 @@ object Unfiltered extends Build {
     module("oauth")(
       settings = Seq(
         unmanagedClasspath in (local("oauth"), Test) <++=
-          (fullClasspath in (local("spec"), Compile)).identity,
+          (fullClasspath in (local("spec"), Compile)),
         libraryDependencies <++= scalaVersion(v =>
           Seq(dispatchOAuthDep) ++
           integrationTestDeps(v))
